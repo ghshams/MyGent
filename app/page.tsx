@@ -22,7 +22,7 @@ const agents: Agent[] = [
   {
     category: 'Text Tools',
     name: 'Word Counter',
-    description: 'Counts occurrences of the word "any" in the input text.',
+    description: 'Counts the total number of words in the input text.',
     inputLabel: 'Upload or paste your text',
     outputPlaceholder: 'Word count result will appear here...'
   },
@@ -42,9 +42,9 @@ export default function MyGent() {
 
   const handleRun = () => {
     if (selectedAgent?.name === 'Word Counter') {
-      const match = inputText.match(/\bany\b/gi);
-      const count = match ? match.length : 0;
-      setOutputText(`The word "any" appears ${count} time(s).`);
+      const words = inputText.trim().split(/\s+/);
+      const count = words.filter(word => word.length > 0).length;
+      setOutputText(`There are ${count} word(s) in the input.`);
     } else {
       setOutputText(`Result for "${selectedAgent?.name}" will show here.`);
     }
