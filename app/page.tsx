@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 // Define the Agent type
 type Agent = {
@@ -20,7 +22,7 @@ const agents: Agent[] = [
   {
     category: 'Text Tools',
     name: 'Word Counter',
-    description: 'Counts occurrences of a specific word in a file.',
+    description: 'Counts occurrences of the word "any" in the input text.',
     inputLabel: 'Upload or paste your text',
     outputPlaceholder: 'Word count result will appear here...'
   },
@@ -39,16 +41,24 @@ export default function MyGent() {
   const [outputText, setOutputText] = useState('');
 
   const handleRun = () => {
-    // Dummy handler. In production, call backend API
-    setOutputText(`Result for "${selectedAgent?.name}" will show here.`);
+    if (selectedAgent?.name === 'Word Counter') {
+      const match = inputText.match(/\bany\b/gi);
+      const count = match ? match.length : 0;
+      setOutputText(`The word "any" appears ${count} time(s).`);
+    } else {
+      setOutputText(`Result for "${selectedAgent?.name}" will show here.`);
+    }
   };
 
   const categories = [...new Set(agents.map(agent => agent.category))];
 
   return (
-    <div className="grid grid-cols-12 h-screen font-poppins">
+    <div className="grid grid-cols-12 h-screen font-poppins bg-gradient-to-br from-gray-50 to-green-100">
       <div className="col-span-3 bg-gray-100 p-4 border-r overflow-y-auto shadow-md">
-        <h2 className="text-xl font-bold mb-4">Agents</h2>
+        <div className="flex items-center gap-3 mb-6">
+          <Image src="/logo.png" alt="Logo" width={32} height={32} />
+          <h1 className="text-xl font-bold text-green-700">MyGent AI</h1>
+        </div>
         {categories.map(cat => (
           <div key={cat} className="mb-4">
             <h3 className="text-lg font-semibold mb-2 text-gray-700">{cat}</h3>
@@ -70,9 +80,19 @@ export default function MyGent() {
         ))}
       </div>
 
-      <div className="col-span-9 p-8 overflow-y-auto">
+      <motion.div
+        className="col-span-9 p-8 overflow-y-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         {selectedAgent ? (
-          <Card className="p-6 shadow-xl rounded-2xl space-y-6">
+          <motion.div
+            className="p-6 shadow-xl rounded-2xl space-y-6 bg-white/90 backdrop-blur"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+          >
             <h2 className="text-2xl font-bold text-gray-800">{selectedAgent.name}</h2>
             <p className="text-gray-500">{selectedAgent.description}</p>
 
@@ -93,7 +113,7 @@ export default function MyGent() {
               </div>
             </div>
 
-            <Button onClick={handleRun} className="w-full py-2">Run Agent</Button>
+            <Button onClick={handleRun} className="w-full py-2 bg-green-600 hover:bg-green-700 text-white">Run Agent</Button>
 
             <div>
               <label className="block font-semibold mb-1">Output</label>
@@ -108,11 +128,11 @@ export default function MyGent() {
                 <Button variant="secondary" size="sm">Download Output</Button>
               </div>
             </div>
-          </Card>
+          </motion.div>
         ) : (
           <div className="text-gray-500 text-lg text-center mt-20">Select an agent from the left to begin</div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
