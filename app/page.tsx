@@ -27,6 +27,13 @@ const agents: Agent[] = [
     outputPlaceholder: 'Word count result will appear here...'
   },
   {
+    category: 'Text Tools',
+    name: 'Capitalize',
+    description: 'Converts all letters in the input text to uppercase.',
+    inputLabel: 'Enter text to capitalize',
+    outputPlaceholder: 'Capitalized result will appear here...'
+  },
+  {
     category: 'Utilities',
     name: 'To-Do Generator',
     description: 'Generates a to-do list from your notes.',
@@ -45,6 +52,8 @@ export default function MyGent() {
       const words = inputText.trim().split(/\s+/);
       const count = words.filter(word => word.length > 0).length;
       setOutputText(`There are ${count} word(s) in the input.`);
+    } else if (selectedAgent?.name === 'Capitalize') {
+      setOutputText(inputText.toUpperCase());
     } else {
       setOutputText(`Result for "${selectedAgent?.name}" will show here.`);
     }
@@ -53,8 +62,8 @@ export default function MyGent() {
   const categories = [...new Set(agents.map(agent => agent.category))];
 
   return (
-    <div className="grid grid-cols-12 h-screen font-poppins bg-gradient-to-br from-gray-50 to-green-100">
-      <div className="col-span-3 bg-gray-100 p-4 border-r overflow-y-auto shadow-md">
+    <div className="grid grid-cols-12 h-screen font-poppins bg-gradient-to-br from-gray-50 to-green-100 pt-12">
+      <div className="col-span-2 bg-gray-200 p-4 border-r overflow-y-auto shadow-md">
         <div className="flex items-center gap-3 mb-6">
           <Image src="/logo.png" alt="Logo" width={32} height={32} />
           <h1 className="text-xl font-bold text-green-700">MyGent AI</h1>
@@ -81,28 +90,28 @@ export default function MyGent() {
       </div>
 
       <motion.div
-        className="col-span-9 p-8 overflow-y-auto"
+        className="col-span-10 p-10 overflow-y-auto"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         {selectedAgent ? (
           <motion.div
-            className="p-6 shadow-xl rounded-2xl space-y-6 bg-white/90 backdrop-blur"
+            className="p-8 shadow-xl rounded-2xl space-y-6 bg-white/90 backdrop-blur"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-2xl font-bold text-gray-800">{selectedAgent.name}</h2>
-            <p className="text-gray-500">{selectedAgent.description}</p>
+            <h2 className="text-3xl font-bold text-gray-800">{selectedAgent.name}</h2>
+            <p className="text-gray-500 text-lg">{selectedAgent.description}</p>
 
             <div>
-              <label className="block font-semibold mb-1">{selectedAgent.inputLabel}</label>
+              <label className="block font-semibold mb-1 text-base">{selectedAgent.inputLabel}</label>
               <Textarea
-                rows={6}
+                rows={10}
                 value={inputText}
                 onChange={e => setInputText(e.target.value)}
-                className="mb-3"
+                className="mb-3 text-lg"
                 placeholder="Type or paste here..."
               />
               <div className="flex items-center gap-3">
@@ -113,16 +122,16 @@ export default function MyGent() {
               </div>
             </div>
 
-            <Button onClick={handleRun} className="w-full py-2 bg-green-600 hover:bg-green-700 text-white">Run Agent</Button>
+            <Button onClick={handleRun} className="w-full py-3 bg-green-600 hover:bg-green-700 text-white text-lg">Run Agent</Button>
 
             <div>
-              <label className="block font-semibold mb-1">Output</label>
+              <label className="block font-semibold mb-1 text-base">Output</label>
               <Textarea
-                rows={6}
+                rows={10}
                 readOnly
                 value={outputText}
                 placeholder={selectedAgent.outputPlaceholder}
-                className="bg-gray-100"
+                className="bg-gray-100 text-lg"
               />
               <div className="mt-2 text-right">
                 <Button variant="secondary" size="sm">Download Output</Button>
