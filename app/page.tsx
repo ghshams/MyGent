@@ -1,4 +1,13 @@
 'use client';
+type Agent = {
+  category: string;
+  name: string;
+  description: string;
+  inputLabel: string;
+  outputPlaceholder: string;
+};
+
+
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,7 +32,7 @@ const agents = [
 ];
 
 export default function MyGent() {
-  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
 
