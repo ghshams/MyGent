@@ -63,14 +63,14 @@ export default function MyGent() {
 
   return (
     <div className="grid grid-cols-12 h-screen font-poppins bg-gradient-to-br from-gray-50 to-green-100 pt-12">
-      <div className="col-span-2 bg-gray-200 p-4 border-r overflow-y-auto shadow-md">
+      <div className="col-span-2 bg-gray-400 p-4 border-r overflow-y-auto shadow-md">
         <div className="flex items-center gap-3 mb-6">
-          <Image src="/logo.png" alt="Logo" width={32} height={32} />
-          <h1 className="text-xl font-bold text-green-700">MyGent AI</h1>
+          <Image src="/logo.png" alt="Logo" width={58} height={58} />
+          <h1 className="text-xl font-bold text-green-800">MyGent AI</h1>
         </div>
         {categories.map(cat => (
           <div key={cat} className="mb-4">
-            <h3 className="text-lg font-semibold mb-2 text-gray-700">{cat}</h3>
+            <h3 className="text-lg font-semibold mb-2 text-gray-100">{cat}</h3>
             {agents.filter(agent => agent.category === cat).map(agent => (
               <Button
                 key={agent.name}
@@ -97,7 +97,7 @@ export default function MyGent() {
       >
         {selectedAgent ? (
           <motion.div
-            className="p-8 shadow-xl rounded-2xl space-y-6 bg-white/90 backdrop-blur"
+            className="p-8 shadow-xl rounded-2xl space-y-6 bg-gray-100 backdrop-blur"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
@@ -131,7 +131,7 @@ export default function MyGent() {
                 readOnly
                 value={outputText}
                 placeholder={selectedAgent.outputPlaceholder}
-                className="bg-gray-100 text-lg"
+                className="bg-gray-200 text-lg"
               />
               <div className="mt-2 text-right">
                 <Button variant="secondary" size="sm">Download Output</Button>
