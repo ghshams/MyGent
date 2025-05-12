@@ -11,7 +11,26 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 
 // Agent type
-...
+// Define the Agent type
+type Agent = {
+  category: string;
+  name: string;
+  description: string;
+  inputLabel: string;
+  outputPlaceholder: string;
+};
+
+const agents: Agent[] = [
+  {
+    category: 'Text Tools',
+    name: 'Word Counter',
+    description: 'Counts the total number of words in the input text.',
+    inputLabel: 'Upload or paste your text',
+    outputPlaceholder: 'Word count result will appear here...'
+  },
+  // ... all other agents here ...
+];
+
 
 export default function MyGent() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
