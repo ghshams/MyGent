@@ -34,17 +34,32 @@ const agents: Agent[] = [
     outputPlaceholder: 'Capitalized result will appear here...'
   },
   {
-    category: 'Utilities',
-    name: 'To-Do Generator',
-    description: 'Generates a to-do list from your notes.',
-    inputLabel: 'Enter your notes or upload a file',
-    outputPlaceholder: 'Generated to-do list...'
+    category: 'Text Tools',
+    name: 'TXT Compare',
+    description: 'Compares two texts and shows their differences.',
+    inputLabel: 'Enter two texts below to compare',
+    outputPlaceholder: 'Differences will appear here...'
+  },
+  {
+    category: 'Crypto Tools',
+    name: 'Position Suggestion',
+    description: 'Suggests possible crypto positions based on market data.',
+    inputLabel: 'N/A',
+    outputPlaceholder: 'Result will appear here...'
+  },
+  {
+    category: 'Crypto Tools',
+    name: 'Top Gainer/Looser',
+    description: 'Displays top gaining and losing cryptocurrencies.',
+    inputLabel: 'N/A',
+    outputPlaceholder: 'Result will appear here...'
   }
 ];
 
 export default function MyGent() {
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [inputText, setInputText] = useState('');
+  const [inputText2, setInputText2] = useState('');
   const [outputText, setOutputText] = useState('');
 
   const handleRun = () => {
@@ -54,6 +69,9 @@ export default function MyGent() {
       setOutputText(`There are ${count} word(s) in the input.`);
     } else if (selectedAgent?.name === 'Capitalize') {
       setOutputText(inputText.toUpperCase());
+    } else if (selectedAgent?.name === 'TXT Compare') {
+      const diff = inputText === inputText2 ? 'No differences found.' : 'Texts are different.';
+      setOutputText(diff);
     } else {
       setOutputText(`Result for "${selectedAgent?.name}" will show here.`);
     }
@@ -69,23 +87,28 @@ export default function MyGent() {
           <h1 className="text-xl font-bold text-green-800">MyGent AI</h1>
         </div>
         {categories.map(cat => (
-          <div key={cat} className="mb-4">
-            <h3 className="text-lg font-semibold mb-2 text-gray-100">{cat}</h3>
-            {agents.filter(agent => agent.category === cat).map(agent => (
-              <Button
-                key={agent.name}
-                className="w-full mb-2 justify-start text-left px-3 py-2"
-                variant={selectedAgent?.name === agent.name ? 'default' : 'outline'}
-                onClick={() => {
-                  setSelectedAgent(agent);
-                  setInputText('');
-                  setOutputText('');
-                }}
-              >
-                {agent.name}
-              </Button>
-            ))}
-          </div>
+          <details key={cat} className="mb-4">
+            <summary className="text-lg font-semibold text-gray-100 cursor-pointer select-none py-1">
+              {cat}
+            </summary>
+            <div className="ml-3 mt-2 space-y-2">
+              {agents.filter(agent => agent.category === cat).map(agent => (
+                <Button
+                  key={agent.name}
+                  className="w-full justify-start text-left px-3 py-2"
+                  variant={selectedAgent?.name === agent.name ? 'default' : 'outline'}
+                  onClick={() => {
+                    setSelectedAgent(agent);
+                    setInputText('');
+                    setInputText2('');
+                    setOutputText('');
+                  }}
+                >
+                  {agent.name}
+                </Button>
+              ))}
+            </div>
+          </details>
         ))}
       </div>
 
@@ -105,22 +128,41 @@ export default function MyGent() {
             <h2 className="text-3xl font-bold text-gray-800">{selectedAgent.name}</h2>
             <p className="text-gray-500 text-lg">{selectedAgent.description}</p>
 
-            <div>
-              <label className="block font-semibold mb-1 text-base">{selectedAgent.inputLabel}</label>
-              <Textarea
-                rows={10}
-                value={inputText}
-                onChange={e => setInputText(e.target.value)}
-                className="mb-3 text-lg"
-                placeholder="Type or paste here..."
-              />
-              <div className="flex items-center gap-3">
-                <input type="file" className="text-sm" />
-                <Button variant="secondary" size="sm" className="flex items-center gap-1">
-                  <Upload className="h-4 w-4" /> Upload
-                </Button>
+            {selectedAgent.name === 'TXT Compare' ? (
+              <>
+                <div>
+                  <label className="block font-semibold mb-1 text-base">First Text</label>
+                  <Textarea
+                    rows={6}
+                    value={inputText}
+                    onChange={e => setInputText(e.target.value)}
+                    className="mb-3 text-lg"
+                    placeholder="Enter first text..."
+                  />
+                </div>
+                <div>
+                  <label className="block font-semibold mb-1 text-base">Second Text</label>
+                  <Textarea
+                    rows={6}
+                    value={inputText2}
+                    onChange={e => setInputText2(e.target.value)}
+                    className="mb-3 text-lg"
+                    placeholder="Enter second text..."
+                  />
+                </div>
+              </>
+            ) : (
+              <div>
+                <label className="block font-semibold mb-1 text-base">{selectedAgent.inputLabel}</label>
+                <Textarea
+                  rows={10}
+                  value={inputText}
+                  onChange={e => setInputText(e.target.value)}
+                  className="mb-3 text-lg"
+                  placeholder="Type or paste here..."
+                />
               </div>
-            </div>
+            )}
 
             <Button onClick={handleRun} className="w-full py-3 bg-green-600 hover:bg-green-700 text-white text-lg">Run Agent</Button>
 
