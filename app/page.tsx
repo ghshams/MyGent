@@ -112,7 +112,7 @@ export default function MyGent() {
             {categories.map(category => (
               <details key={category} open>
                 <summary className="flex items-center gap-2 cursor-pointer text-gray-800 text-sm font-medium mb-1 hover:text-gray-900">
-                  <Folder className="w-4 h-4 text-gray-500" />
+                <Folder className="w-4 h-4 text-blue-500" />
                   {category}
                 </summary>
                 <div className="pl-6 space-y-1 mt-1">
